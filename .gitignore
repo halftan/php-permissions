@@ -1,0 +1,8 @@
+/.idea
+/.settings
+/.buildpath
+/.project
+/.tags
+/vendor
+/composer.lock
+/public/statics

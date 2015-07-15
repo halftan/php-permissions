@@ -1,0 +1,25 @@
+{
+    "name": "zhangfengming/permissions",
+    "description": "A Simple Access Control Library",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "zhangfengming",
+            "email": "zhangfengming@baidu.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "4.7.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Permissions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PermissionsTest\\":"tests/"
+        }
+    }
+}
