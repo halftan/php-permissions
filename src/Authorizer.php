@@ -76,8 +76,10 @@ class Authorizer
         if (empty(self::$aRules)) {
             self::$aRules = array();
             foreach ($this->aAllPermits as $perm) {
-                $aUrl = explode('.', $perm['id']);
+                $sPermit    = is_array($perm) ? $perm['id'] : $perm;
+                $aUrl       = explode('.', $sPermit);
                 $sLastBlock = array_pop($aUrl);
+
                 if (strpos($sLastBlock, '_')) {
                     list($sSLastBlock, $sMethod) = explode('_', $sLastBlock);
                     $sMethod = strtoupper($sMethod);
@@ -93,7 +95,7 @@ class Authorizer
                 self::$aRules[] = array(
                     'url'    => array_map([$this, 'decamelize'], $aUrl),
                     'method' => $sMethod,
-                    'id'     => $perm['id']
+                    'id'     => $sPermit,
                 );
             }
         }
