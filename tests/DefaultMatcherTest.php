@@ -42,7 +42,7 @@ class DefaultMatcherTest extends \PHPUnit_Framework_TestCase
             [
                 'one/two/three',
                 'GET',
-                [],
+                ['one.two'],
             ],
             [
                 'one/two/getonly',
@@ -52,7 +52,7 @@ class DefaultMatcherTest extends \PHPUnit_Framework_TestCase
             [
                 'one/two/getonly',
                 'POST',
-                [],
+                ['one.two_POST'],
             ],
             [
                 'one/two/postonly',
@@ -62,7 +62,7 @@ class DefaultMatcherTest extends \PHPUnit_Framework_TestCase
             [
                 'one/two/postonly',
                 'GET',
-                [],
+                ['one.two'],
             ]
         ];
     }

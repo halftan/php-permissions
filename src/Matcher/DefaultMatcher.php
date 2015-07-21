@@ -110,19 +110,7 @@ class DefaultMatcher implements IMatcher
      */
     public function match()
     {
-        $aResult = array_values(array_map(function($var) {
-            return $var['id'];
-        }, array_filter($this->aRules, function($var) {
-            if ($var['method'] !== "ALL"
-                && $var['method'] !== $this->sMethod) {
-                return false;
-            }
-            $sTestUrl = implode('.', $var['url']);
-            if ($sTestUrl !== $this->sUrl) {
-                return false;
-            }
-            return true;
-        })));
+        $aResult = $this->getRelatedPermitId();
         $aResult = array_reduce($aResult, function ($carry, $item) {
             if (strlen($carry) < strlen($item)) {
                 return $item;
@@ -135,5 +123,23 @@ class DefaultMatcher implements IMatcher
         } else {
             return array($aResult);
         }
+    }
+
+    protected function getRelatedPermitId()
+    {
+        return array_values(array_map(function($var) {
+            return $var['id'];
+        }, array_filter($this->aRules, function($var) {
+            if ($var['method'] !== "ALL"
+                && $var['method'] !== $this->sMethod) {
+                return false;
+            }
+            foreach ($var['url'] as $iKey => $sVal){
+                if ($sVal !== $this->aUrl[$iKey]) {
+                    return false;
+                }
+            }
+            return true;
+        })));
     }
 }
