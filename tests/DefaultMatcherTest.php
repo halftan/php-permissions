@@ -39,6 +39,31 @@ class DefaultMatcherTest extends \PHPUnit_Framework_TestCase
                 'POST',
                 ['one.two_POST'],
             ],
+            [
+                'one/two/three',
+                'GET',
+                [],
+            ],
+            [
+                'one/two/getonly',
+                'GET',
+                ['one.two.getonly_GET'],
+            ],
+            [
+                'one/two/getonly',
+                'POST',
+                [],
+            ],
+            [
+                'one/two/postonly',
+                'POST',
+                ['one.two.postonly_POST'],
+            ],
+            [
+                'one/two/postonly',
+                'GET',
+                [],
+            ]
         ];
     }
 }

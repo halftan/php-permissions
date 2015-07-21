@@ -45,25 +45,41 @@ class DefaultMatcher implements IMatcher
     /**
      * 权限匹配函数说明
      *
-     * @param array  $aUrl 请求的URL地址，以'/'分片 eg: ['op', 'content']
-     * @param string $sMethod HTTP请求动作 eg: GET, POST, PUT ...
-     * @param array  $aRules 由数据库表permit_item读取到的权限id，解析为匹配规则。
+     * @param string|array  $saUrl_Rules 请求的URL地址，以'/'分片 eg: ['op', 'content']
+     * @param string|null $sMethod HTTP请求动作 eg: GET, POST, PUT ...
+     * @param array|null  $aRules 由数据库表permit_item读取到的权限id，解析为匹配规则。
+     *
+     * @throws Exception
      */
-    public function __construct($sUrl, $sMethod, $aRules)
+    public function __construct($saUrl_Rules, $sMethod = null, $aRules = null)
     {
-        $aUrlInfo = parse_url($sUrl);
-        $sUrl     = $aUrlInfo['path'];
-
-        $this->aUrl    = explode('/', $sUrl);
-        $this->sUrl    = implode('.', $this->aUrl);
-        $this->sMethod = $sMethod;
-        $this->aRules  = $aRules;
-
-        if (isset($aUrlInfo['query'])) {
-            $sQuery = $aUrlInfo['query'];
-            parse_str($sQuery, $this->aQuery);
+        if (is_array($saUrl_Rules)) {
+            $aUrlInfo      = parse_url($_SERVER['REQUEST_URI']);
+            $this->aUrl    = explode('/', $aUrlInfo['path']);
+            $this->sUrl    = implode('.', $this->aUrl);
+            $this->sMethod = $_SERVER['REQUEST_METHOD'];
+            $this->aRules  = $saUrl_Rules;
         } else {
-            $this->aQuery = array();
+            if (empty($sMethod)) {
+                $sMethod = $_SERVER['REQUEST_METHOD'];
+            }
+            if (empty($aRules)) {
+                throw new \Exception('Rules cannot be empty when initializing Matcher.');
+            }
+            $aUrlInfo = parse_url($saUrl_Rules);
+            $sUrl     = $aUrlInfo['path'];
+
+            $this->aUrl    = explode('/', $sUrl);
+            $this->sUrl    = implode('.', $this->aUrl);
+            $this->sMethod = $sMethod;
+            $this->aRules  = $aRules;
+
+            if (isset($aUrlInfo['query'])) {
+                $sQuery = $aUrlInfo['query'];
+                parse_str($sQuery, $this->aQuery);
+            } else {
+                $this->aQuery = array();
+            }
         }
     }
 
@@ -90,8 +106,7 @@ class DefaultMatcher implements IMatcher
     /**
      * 这个Matcher只会返回最长的id串，也就是说只匹配颗粒度最细的一项权限
      *
-     * @return array 权限id数组，id必须与数据库permit_item表中的id一致
-     *       数组index从0开始
+     * @return array|bool 权限id数组，id必须与数据库permit_item表中的id一致，数组index从0开始。如无匹配权限，则回返回空数组。
      */
     public function match()
     {
