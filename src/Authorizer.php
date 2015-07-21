@@ -30,6 +30,7 @@ class Authorizer
     public function __construct(array $aConfig, array $aAllPermits)
     {
         $this->aAllPermits = $aAllPermits;
+        $this->aConfig     = $aConfig;
     }
 
     /**
