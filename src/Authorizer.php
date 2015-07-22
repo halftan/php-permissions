@@ -45,7 +45,7 @@ class Authorizer
     public function inflatePermitItems($sUri, $sMethod)
     {
         $aRules   = $this->getAllPermitItems();
-        $sUri     = substr($sUri, 1);
+        $sUri     = $sUri[0] == '/' ? substr($sUri, 1) : $sUri;
         $sService = explode('/', $sUri)[0];
         if (isset($this->aConfig[$sService])) {
             $MatcherClass = $this->aConfig[$sService];
@@ -77,7 +77,7 @@ class Authorizer
         if (empty(self::$aRules)) {
             self::$aRules = array();
             foreach ($this->aAllPermits as $perm) {
-                $sPermit    = is_array($perm) ? $perm['id'] : $perm;
+                $sPermit    = is_string($perm) ? $perm : $perm['id'];
                 $aUrl       = explode('.', $sPermit);
                 $sLastBlock = array_pop($aUrl);
 
