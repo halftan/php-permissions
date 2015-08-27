@@ -24,10 +24,10 @@ class Authorizer
      * 初始化时传入两个参数 aConfig, aAllPermits
      *
      * @param array $aConfig 配置参数。至少含有 '__default' => "Namespace\\Matcher"
-     * @param array $aAllPermits 所有权限项
+     * @param Traversable $aAllPermits 所有权限项
      *
      */
-    public function __construct(array $aConfig, array $aAllPermits)
+    public function __construct(array $aConfig, \Traversable $aAllPermits)
     {
         $this->aAllPermits = $aAllPermits;
         $this->aConfig     = $aConfig;
